@@ -5,8 +5,47 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GaijinExplorer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Gaijin Explorer" Height="720" Width="980">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Frame Grid.Column="1" Grid.Row="0" Name="ExplorerFrame" NavigationUIVisibility="Hidden"/>
+        <Grid Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="50"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="50"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="Manga">
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Manga"/>
+                        <MenuItem Header="Anime"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Name="BackButton" Content="Back" Click="BackButton_Click"/>
+                <Button Grid.Column="1" Name="HomeButton" Content="Home" Click="HomeButton_Click"/>
+                <Button Grid.Column="2" Name="NextButton" Content="Next" Click="NextButton_Click"/>
+            </Grid>
+            <Button Grid.Row="2" Name="SearchButton" Content="Search" Click="SearchButton_Click"/>
+            <ProgressBar Grid.Row="10" Value="75" Maximum="100" Margin="10"/>
+        </Grid>
     </Grid>
 </Window>

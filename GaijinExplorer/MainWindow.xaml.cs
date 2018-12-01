@@ -21,9 +21,14 @@ namespace GaijinExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static Frame Frame { get; set; }
+        public static NavigationService NavigationService { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            Frame = ExplorerFrame;
+            NavigationService = Frame.NavigationService;
 
             //ExplorerFrame.Source = new Uri("Explorer.xaml");
             //Debug.WriteLine("Frame source: " + ExplorerFrame.Source);
@@ -32,22 +37,26 @@ namespace GaijinExplorer
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
+            App.CancellationToken.Cancel();
             ExplorerFrame.Navigate(new Uri("Explorer.xaml", UriKind.RelativeOrAbsolute));
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ExplorerFrame.CanGoBack)
+            
+            if (NavigationService.CanGoBack)
             {
-                ExplorerFrame.GoBack();
+                App.CancellationToken.Cancel();
+                NavigationService.GoBack();
             }
         }
 
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
-            if (ExplorerFrame.CanGoForward)
+            if (NavigationService.CanGoForward)
             {
-                ExplorerFrame.GoForward();
+                App.CancellationToken.Cancel();
+                NavigationService.GoForward();
             }
         }
 

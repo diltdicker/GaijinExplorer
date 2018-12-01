@@ -108,18 +108,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Database\MangaDAO.cs" />
     <Compile Include="Explorer.xaml.cs">
       <DependentUpon>Explorer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Http\HttpHelper.cs" />
+    <Compile Include="Http\HttpMangaEden.cs" />
+    <Compile Include="MangaPage.xaml.cs">
+      <DependentUpon>MangaPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Manga\Chapter.cs" />
     <Compile Include="Manga\Manga.cs" />
-    <Compile Include="TestPage.xaml.cs">
-      <DependentUpon>TestPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="TestPage2.xaml.cs">
-      <DependentUpon>TestPage2.xaml</DependentUpon>
-    </Compile>
     <Page Include="Explorer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -136,11 +134,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="TestPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="TestPage2.xaml">
+    <Page Include="MangaPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -175,7 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Database\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

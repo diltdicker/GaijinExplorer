@@ -17,15 +17,19 @@ using System.Windows.Shapes;
 namespace GaijinExplorer
 {
     /// <summary>
-    /// Interaction logic for TestPage2.xaml
+    /// Interaction logic for MangaPage.xaml
     /// </summary>
-    public partial class TestPage2 : Page
+    public partial class MangaPage : Page
     {
-        public TestPage2()
+        public MangaPage()
         {
             InitializeComponent();
+            Debug.WriteLine("MangaPage");
+        }
 
-            Debug.WriteLine("page 2");
+        void NavigationService_LoadCompleted(object sender, NavigationEventArgs e)
+        {
+            Debug.WriteLine("Navigated to");
         }
     }
 }

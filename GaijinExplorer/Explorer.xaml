@@ -4,20 +4,46 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:GaijinExplorer"
+      xmlns:manga="clr-namespace:GaijinExplorer.Manga"
       mc:Ignorable="d" 
-      d:DesignHeight="450" d:DesignWidth="800"
+      d:DesignHeight="800" d:DesignWidth="800"
       Title="Explorer">
-
     <Grid Background="White">
         <Grid.RowDefinitions>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Image Grid.Row="0" Name="TestImage"/>
-        <Grid Background="LightGray" Grid.Row="1">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Background="LightGray">
+            <Button Content="Discover" Name="DiscoverButton" Click="DiscoverButton_Click" Width="100"/>
+            <Button Content="Popular" Name="PopularButton" Click="PopularButton_Click" Width="100"/>
+            <Button Content="Updated" Name="UpdatedButton" Click="UpdatedButton_Click" Width="100"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <ListBox Name="MangaListBox" SelectedIndex="-1"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" BorderBrush="{x:Null}" SelectionChanged="MangaListBox_SelectionChanged">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel/>
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:Name="MangaTemplate" DataType="{x:Type manga:Manga}">
+                        <Grid Height="350" Width="200">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Image Grid.Row="0" Source="{Binding ImageString}" VerticalAlignment="Top"/>
+                            <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="Wrap" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center"/>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+        <Grid Background="LightGray" Grid.Row="2">
             <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
                 <TextBlock Text="Donate!"/>
             </StackPanel>

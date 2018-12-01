@@ -27,9 +27,10 @@ namespace GaijinExplorer
             Debug.WriteLine("MangaPage");
         }
 
-        void NavigationService_LoadCompleted(object sender, NavigationEventArgs e)
+        public MangaPage(string id)
         {
-            Debug.WriteLine("Navigated to");
+            InitializeComponent();
+            Debug.WriteLine("MangaPage id: " + id);
         }
     }
 }

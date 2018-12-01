@@ -135,7 +135,8 @@ namespace GaijinExplorer
                 string id = String.Copy(manga.Id);
                 MangaListBox.SelectedIndex = -1;
                 ObservableMangas.Clear();
-                MainWindow.NavigationService.Navigate(new Uri("MangaPage.xaml", UriKind.RelativeOrAbsolute), id);
+                MainWindow.NavigationService.Navigate(new MangaPage(id));
+                //this.NavigationService.Navigate(new MangaPage(id));
             }
         }
 

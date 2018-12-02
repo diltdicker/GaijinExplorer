@@ -11,7 +11,11 @@ namespace GaijinExplorer.Manga
     {
         public string Id { get; set; }
         public List<string> ImageStrings { get; set; }
-        public List<string> ChapterTitles { get; set; }
+        public string Title { get; set; }
+        public double Number { get; set; }
+        public long Date { get; set; }
+        public enum HasViewed { Viewed, New }
+        public HasViewed ViewedStatus { get; set; }
 
         //
 

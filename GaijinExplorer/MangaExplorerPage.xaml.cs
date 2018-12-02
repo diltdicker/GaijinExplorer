@@ -22,15 +22,17 @@ namespace GaijinExplorer
     /// <summary>
     /// Interaction logic for Explorer.xaml
     /// </summary>
-    public partial class Explorer : Page
+    public partial class MangaExplorerPage : Page
     {
         ObservableCollection<Manga.Manga> ObservableMangas = new ObservableCollection<Manga.Manga>();
         List<Manga.Manga> backupMangaList = new List<Manga.Manga>();
         List<Manga.Manga> displayedMangaList = new List<Manga.Manga>();
 
-        public Explorer()
+        public MangaExplorerPage()
         {
             InitializeComponent();
+            //this.NavigationService.RemoveBackEntry();
+            MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ExploreMangaPage);
             MangaListBox.ItemsSource = ObservableMangas;
             DataContext = this;
 
@@ -134,8 +136,8 @@ namespace GaijinExplorer
             {
                 string id = String.Copy(manga.Id);
                 MangaListBox.SelectedIndex = -1;
-                ObservableMangas.Clear();
-                MainWindow.NavigationService.Navigate(new MangaPage(id));
+                //ObservableMangas.Clear();
+                MainWindow.Frame.Navigate(new MangaPage(id));
                 //this.NavigationService.Navigate(new MangaPage(id));
             }
         }
@@ -193,7 +195,7 @@ namespace GaijinExplorer
             int i = 0;
             while (displayedMangaList.Count < 102)
             {
-                Debug.WriteLine("last date: " + backupMangaList[i].LastDate);
+                //Debug.WriteLine("last date: " + backupMangaList[i].LastDate);
                 displayedMangaList.Add(backupMangaList[i]);
                 backupMangaList.RemoveAt(i);
             }
@@ -202,6 +204,37 @@ namespace GaijinExplorer
             {
                 ObservableMangas.Add(manga);
             }
+        }
+
+        private void AlphabeticalButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (Manga.Manga manga in displayedMangaList)
+            {
+                backupMangaList.Add(manga);
+            }
+            displayedMangaList.Clear();
+            ObservableMangas.Clear();
+            Task.Run(() =>
+            {
+                backupMangaList = backupMangaList.OrderBy(manga => manga.Title).ToList();
+
+                foreach (Manga.Manga manga in backupMangaList)
+                {
+                    try
+                    {
+                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                        {
+                            ObservableMangas.Add(manga);
+                        }));
+                    }
+                    catch (Exception exception)
+                    {
+                        Debug.WriteLine(exception.TargetSite);
+                        Debug.WriteLine(exception.StackTrace);
+                    }
+                    
+                }
+            });
         }
     }
 }

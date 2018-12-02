@@ -29,6 +29,7 @@ namespace GaijinExplorer
         public const string APP_MANGA_CHAPTER_IMAGE_TABLE = "manga_chapter_image_table";
         public const string APP_FAVORITE_TABLE = "favorite_table";
         public const string APP_MANGA_CATEGORY_TABLE = "manga_catagory_table";
+        
         const string INIT_MANGA_TABLE = "CREATE TABLE IF NOT EXISTS " + APP_MANGA_TABLE + " (" +
             "manga_id TEXT PRIMARY KEY," +
             "manga_title TEXT NOT NULL," +
@@ -48,6 +49,7 @@ namespace GaijinExplorer
             "manga_id TEXT NOT NULL," +
             "date INTEGER DEFAULT 0," +
             "chapter_title TEXT," +
+            "has_viewed TEXT DEFAULT 'New' CHECK (has_viewed IN ('Viewed', 'New'))" +
             "FOREIGN KEY (manga_id) REFERENCES " + APP_MANGA_TABLE + "(manga_id)" +
             ") WITHOUT ROWID;";
         const string INIT_MANGA_CHAPTER_IMAGE_TABLE = "CREATE TABLE IF NOT EXISTS " + APP_MANGA_CHAPTER_IMAGE_TABLE + " (" +

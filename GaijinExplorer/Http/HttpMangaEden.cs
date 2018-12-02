@@ -14,7 +14,7 @@ namespace GaijinExplorer.Http
     class HttpMangaEden
     {
         const string IMAGE_URL = "https://cdn.mangaeden.com/mangasimg/";
-        const string MANGA_URL = "https://www.mangaeden.com/api";
+        const string MANGA_URL = "https://www.mangaeden.com/api/";
 
         static void TestFunc_1()
         {
@@ -47,7 +47,7 @@ namespace GaijinExplorer.Http
         public static async Task GetIndividualMangaTitlesAsync(Func<Manga.Manga, bool> callback)
         {
             //List<Manga.Manga> mangas = new List<Manga.Manga>();
-            Uri uri = new Uri(MANGA_URL + "/list/0/");
+            Uri uri = new Uri(MANGA_URL + "list/0/");
             HttpClient client = new HttpClient();
             dynamic json = null;
             try
@@ -115,7 +115,7 @@ namespace GaijinExplorer.Http
         public static async Task GetAllMangaTitlesAsync(Func<List<Manga.Manga>, bool> callback)
         {
             List<Manga.Manga> mangas = new List<Manga.Manga>();
-            Uri uri = new Uri(MANGA_URL + "/list/0/");
+            Uri uri = new Uri(MANGA_URL + "list/0/");
             HttpClient client = new HttpClient();
             dynamic json = null;
             try
@@ -179,6 +179,83 @@ namespace GaijinExplorer.Http
             }
             Debug.WriteLine("Done Getting Manga 1");
             callback.Invoke(mangas);
+        }
+
+        public static async Task GetManga(string id, Func<Manga.Manga, bool> callback)
+        {
+            Manga.Manga manga = null;
+            Uri uri = new Uri(MANGA_URL + "manga/" + id);
+            HttpClient client = new HttpClient();
+            dynamic json = null;
+            try
+            {
+                string jsonString = await client.GetStringAsync(uri);
+                json = JsonConvert.DeserializeObject(jsonString);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.TargetSite);
+                Debug.WriteLine(e.StackTrace);
+            }
+            if (json != null)
+            {
+                try
+                {
+                    manga = new Manga.Manga
+                    {
+                        Id = id,
+                        Title = json.title,
+                        ImageString = json.image,
+                        Description = json.description,
+                        Artist = json.artist,
+                        Author = json.author,
+                        Chapters = new List<Manga.Chapter>(),
+                        Categories = new List<string>()
+                    };
+                    manga.SetStatus((int)json.status);
+                    if (json.last_chapter_date != null)
+                    {
+                        manga.LastDate = (long)json.last_chapter_date;
+                    }
+                    if (manga.ImageString != null)
+                    {
+                        //Debug.WriteLine("valid image [ " + manga.ImageString + " ]");
+                        //manga.Image = new BitmapImage(new Uri(IMAGE_URL + manga.ImageString));
+                        manga.ImageString = IMAGE_URL + manga.ImageString;
+                    }
+                    else
+                    {
+                        manga.ImageString = IMAGE_URL;
+                        //manga.Image = new BitmapImage();
+                    }
+                    for (int k = 0; k < json.categories.Count; k++)
+                    {
+                        string category = (string) json.categories[k];
+                        //Debug.WriteLine("category [ " + category + " ]");
+                        manga.Categories.Add(category);
+                    }
+                    for (int i = 0; i < json.chapters.Count; i++)
+                    {
+                        Manga.Chapter chapter = new Manga.Chapter
+                        {
+                            Id = json.chapters[i][3],
+                            Title = json.chapters[i][2],
+                            Number = (double)json.chapters[i][0]
+                        };
+                        if (json.chapters[i][1] != null)
+                        {
+                            chapter.Date = json.chapters[i][1];
+                        }
+                        manga.Chapters.Add(chapter);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.TargetSite);
+                    Debug.WriteLine(e.StackTrace);
+                }
+            }
+            callback.Invoke(manga);
         }
     }
 }

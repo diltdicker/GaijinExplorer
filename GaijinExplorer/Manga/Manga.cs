@@ -24,7 +24,7 @@ namespace GaijinExplorer.Manga
         public string Description { get; set; }
         public string Artist { get; set; }
         public string Author { get; set; }
-        public List<string> ChapterIds { get; set; }
+        public List<Chapter> Chapters { get; set; }
 
         public void SetStatus(int status)
         {

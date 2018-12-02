@@ -1,4 +1,4 @@
-﻿<Page x:Class="GaijinExplorer.Explorer"
+﻿<Page x:Class="GaijinExplorer.MangaExplorerPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -21,6 +21,7 @@
             <Button Content="Discover" Name="DiscoverButton" Click="DiscoverButton_Click" Width="100" FontSize="20"/>
             <Button Content="Popular" Name="PopularButton" Click="PopularButton_Click" Width="100" FontSize="20"/>
             <Button Content="Updated" Name="UpdatedButton" Click="UpdatedButton_Click" Width="100" FontSize="20"/>
+            <!--<Button Content="Alphabetical" Name="AlphabeticalButton" Click="AlphabeticalButton_Click" Width="150" FontSize="20"/>-->
         </StackPanel>
         <Grid Grid.Row="1">
             <ListBox Name="MangaListBox" SelectedIndex="-1"  ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top" BorderBrush="{x:Null}" SelectionChanged="MangaListBox_SelectionChanged">
@@ -37,7 +38,7 @@
                                 <RowDefinition Height="auto"/>
                             </Grid.RowDefinitions>
                             <Image Grid.Row="0" Source="{Binding ImageString}" VerticalAlignment="Top"/>
-                            <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="Wrap" FontSize="20" FontWeight="DemiBold" HorizontalAlignment="Center" Margin="0,0,0,5"/>
+                            <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="Wrap" FontSize="20" FontWeight="DemiBold" Margin="0,0,0,5" TextAlignment="Center"/>
                         </Grid>
                     </DataTemplate>
                 </ListBox.ItemTemplate>

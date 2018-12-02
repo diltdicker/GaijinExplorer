@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace GaijinExplorer.Manga
 {
-    class Chapter
+    public class Chapter
     {
         public string Id { get; set; }
         public List<string> ImageStrings { get; set; }

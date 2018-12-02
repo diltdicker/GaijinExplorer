@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,10 +21,16 @@ namespace GaijinExplorer
     /// </summary>
     public partial class ChapterPage : Page
     {
-        public ChapterPage(string id)
+        Manga.Chapter Chapter { get; set; }
+        List<Manga.Chapter> Chapters { get; set; }
+
+        public ChapterPage(string id, List<Manga.Chapter> chapters)
         {
             InitializeComponent();
             MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ChapterPage);
+            Chapters = chapters;
+            Debug.WriteLine("chapter id = " + id);
+            Debug.WriteLine("chapters size = " + Chapters.Count);
         }
     }
 }

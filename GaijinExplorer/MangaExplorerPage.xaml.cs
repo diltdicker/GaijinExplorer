@@ -67,31 +67,6 @@ namespace GaijinExplorer
         /// </summary>
         public void GetAllMangaTitles()
         {
-            //App.CancellationToken = new CancellationTokenSource();
-            //Task.Run(async () => await Http.HttpMangaEden.GetIndividualMangaTitlesAsync((Manga.Manga manga) =>
-            //{
-            //    if (!App.CancellationToken.IsCancellationRequested)
-            //    {
-            //        try
-            //        {
-            //            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
-            //            {
-            //                // UI Thread Execution
-            //                ObservableMangas.Add(manga);
-            //            }));
-            //        }
-            //        catch (Exception e)
-            //        {
-            //            Debug.WriteLine(e.TargetSite);
-            //            Debug.WriteLine(e.StackTrace);
-            //        }
-            //        return true;
-            //    }
-            //    else
-            //    {
-            //        return false;
-            //    }
-            //}), App.CancellationToken.Token);
             App.CancellationToken = new CancellationTokenSource();
             Task.Run(async () => await Http.HttpMangaEden.GetAllMangaTitlesAsync((List<Manga.Manga> mangas) =>
             {
@@ -150,7 +125,7 @@ namespace GaijinExplorer
             }
             displayedMangaList.Clear();
             Random random = new Random();
-            while (displayedMangaList.Count < 102)
+            while (displayedMangaList.Count < 102 && backupMangaList.Count > 0)
             {
                 int i = random.Next(0, backupMangaList.Count);
                 displayedMangaList.Add(backupMangaList[i]);
@@ -172,7 +147,7 @@ namespace GaijinExplorer
             displayedMangaList.Clear();
             backupMangaList = backupMangaList.OrderByDescending(manga => manga.Hits).ToList();
             int i = 0;
-            while (displayedMangaList.Count < 102)
+            while (displayedMangaList.Count < 102 && backupMangaList.Count > 0)
             {
                 displayedMangaList.Add(backupMangaList[i]);
                 backupMangaList.RemoveAt(i);
@@ -193,7 +168,7 @@ namespace GaijinExplorer
             displayedMangaList.Clear();
             backupMangaList = backupMangaList.OrderByDescending(manga => manga.LastDate).ToList();
             int i = 0;
-            while (displayedMangaList.Count < 102)
+            while (displayedMangaList.Count < 102 && backupMangaList.Count > 0)
             {
                 //Debug.WriteLine("last date: " + backupMangaList[i].LastDate);
                 displayedMangaList.Add(backupMangaList[i]);

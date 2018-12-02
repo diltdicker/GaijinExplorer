@@ -88,11 +88,21 @@ namespace GaijinExplorer
         private void CategoriesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             Debug.WriteLine("Category: " + (sender as ListBox).SelectedItem as string);
+            if ((sender as ListBox).SelectedItem is string category)
+            {
+                (sender as ListBox).SelectedIndex = -1;
+            }
+
         }
 
         private void ChapterList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine("Chapter: " + ((sender as ListView).SelectedItem as Manga.Chapter).Title);
+            if ((sender as ListView).SelectedItem is Manga.Chapter chapter)
+            {
+                Debug.WriteLine("Chapter: " + chapter.Title);
+                (sender as ListView).SelectedIndex = -1;
+                MainWindow.Frame.Navigate(new ChapterPage(chapter.Id, Manga.Chapters));
+            }
         }
 
 

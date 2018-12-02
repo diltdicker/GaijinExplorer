@@ -101,7 +101,7 @@ namespace GaijinExplorer
             {
                 Debug.WriteLine("Chapter: " + chapter.Title);
                 (sender as ListView).SelectedIndex = -1;
-                MainWindow.Frame.Navigate(new ChapterPage(chapter.Id, Manga.Chapters));
+                MainWindow.Frame.Navigate(new ChapterPage(chapter, Manga.Chapters));
             }
         }
 

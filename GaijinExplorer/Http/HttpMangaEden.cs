@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace GaijinExplorer.Http
@@ -256,6 +258,121 @@ namespace GaijinExplorer.Http
                 }
             }
             callback.Invoke(manga);
+        }
+
+        public static async Task GetChapterImageStringsIndividually(string id, Func<string, bool> callback)
+        {
+            Uri uri = new Uri(MANGA_URL + "chapter/" + id);
+            HttpClient client = new HttpClient();
+            dynamic json = null;
+            try
+            {
+                string jsonString = await client.GetStringAsync(uri);
+                json = JsonConvert.DeserializeObject(jsonString);
+            }
+            catch(Exception e)
+            {
+                Debug.WriteLine(e.TargetSite);
+                Debug.WriteLine(e.StackTrace);
+            }
+            if (json != null){
+                try
+                {
+                    for (int i = json.images.Count - 1; i >= 0; i--)
+                    {
+                        //BitmapImage image = new BitmapImage(new Uri(IMAGE_URL + json.images[i][1] as string));
+                        callback.Invoke(IMAGE_URL + json.images[i][1] as string);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.TargetSite);
+                    Debug.WriteLine(e.StackTrace);
+                }
+            }
+        }
+
+        public static async Task GetChapterImagesIndividually(string id, Func<BitmapImage, bool> callback)
+        {
+            Uri uri = new Uri(MANGA_URL + "chapter/" + id);
+            HttpClient client = new HttpClient();
+            dynamic json = null;
+            try
+            {
+                string jsonString = await client.GetStringAsync(uri);
+                json = JsonConvert.DeserializeObject(jsonString);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.TargetSite);
+                Debug.WriteLine(e.StackTrace);
+            }
+            if (json != null)
+            {
+                try
+                {
+                    for (int i = json.images.Count - 1; i >= 0; i--)
+                    {
+                        //BitmapImage image = new BitmapImage(new Uri(IMAGE_URL + json.images[i][1] as string));
+                        //ImageSource source = new BitmapImage(new Uri(IMAGE_URL + json.images[i][1] as string));
+
+                        //source.Freeze();
+                        byte[] imageBuffer = new WebClient().DownloadData(IMAGE_URL + json.images[i][1] as string);
+                        BitmapImage bitmap = new BitmapImage();
+                        using (MemoryStream stream = new MemoryStream(imageBuffer))
+                        {
+                            bitmap.BeginInit();
+                            bitmap.StreamSource = stream;
+                            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                            bitmap.EndInit();
+                        }
+                        bitmap.Freeze();
+                        callback.Invoke(bitmap);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.TargetSite);
+                    Debug.WriteLine(e.StackTrace);
+                }
+            }
+        }
+
+        public static async Task GetChapterImageBuffersIndividually(string id, Func<byte[], bool> callback)
+        {
+            Uri uri = new Uri(MANGA_URL + "chapter/" + id);
+            HttpClient client = new HttpClient();
+            dynamic json = null;
+            try
+            {
+                string jsonString = await client.GetStringAsync(uri);
+                json = JsonConvert.DeserializeObject(jsonString);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e.TargetSite);
+                Debug.WriteLine(e.StackTrace);
+            }
+            if (json != null)
+            {
+                try
+                {
+                    for (int i = json.images.Count - 1; i >= 0; i--)
+                    {
+                        //BitmapImage image = new BitmapImage(new Uri(IMAGE_URL + json.images[i][1] as string));
+                        //ImageSource source = new BitmapImage(new Uri(IMAGE_URL + json.images[i][1] as string));
+
+                        //source.Freeze();
+                        byte[] imageBuffer = new WebClient().DownloadData(IMAGE_URL + json.images[i][1] as string);
+                        callback.Invoke(imageBuffer);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e.TargetSite);
+                    Debug.WriteLine(e.StackTrace);
+                }
+            }
         }
     }
 }

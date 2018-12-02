@@ -22,29 +22,28 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="50"/>
                 <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="50"/>
             </Grid.RowDefinitions>
-            <Button Grid.Row="0" Content="Manga">
+            <!--<Button Grid.Row="0" Content="Manga">
                 <Button.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="Manga"/>
                         <MenuItem Header="Anime"/>
                     </ContextMenu>
                 </Button.ContextMenu>
-            </Button>
-            <Grid Grid.Row="1">
+            </Button>-->
+            <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                     <ColumnDefinition Width="1*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Name="BackButton" Content="Back" Click="BackButton_Click"/>
-                <Button Grid.Column="1" Name="HomeButton" Content="Home" Click="HomeButton_Click"/>
-                <Button Grid.Column="2" Name="NextButton" Content="Next" Click="NextButton_Click"/>
+                <Button Grid.Column="0" Name="BackButton" Content="Back" Click="BackButton_Click" FontSize="20"/>
+                <Button Grid.Column="1" Name="HomeButton" Content="Home" Click="HomeButton_Click" FontSize="20"/>
+                <Button Grid.Column="2" Name="NextButton" Content="Next" Click="NextButton_Click" FontSize="20"/>
             </Grid>
-            <Button Grid.Row="2" Name="SearchButton" Content="Search" Click="SearchButton_Click"/>
+            <Button Grid.Row="1" Name="SearchButton" Content="Search" Click="SearchButton_Click" FontSize="20"/>
             <ProgressBar Grid.Row="10" Value="75" Maximum="100" Margin="10"/>
         </Grid>
     </Grid>

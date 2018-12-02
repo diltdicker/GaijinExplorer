@@ -21,25 +21,43 @@ namespace GaijinExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
+        public static Frame Frame { get; set; }
+        public static NavigationService navigationService;
+        public enum ExplorerPage { ExploreMangaPage, MangaPage, ChapterPage}
+        private static int FrameHistoryIndex { get; set; }
+        public static List<ExplorerPage> FrameHistory { get; set; }
+
         public MainWindow()
         {
             InitializeComponent();
+            Frame = ExplorerFrame;
+            FrameHistoryIndex = -1;
+            FrameHistory = new List<ExplorerPage>();
+            //Frame.CacheMode = null;
+            navigationService = ExplorerFrame.NavigationService;
 
             //ExplorerFrame.Source = new Uri("Explorer.xaml");
             //Debug.WriteLine("Frame source: " + ExplorerFrame.Source);
-            ExplorerFrame.Navigate(new Uri("Explorer.xaml", UriKind.RelativeOrAbsolute));
+            ExplorerFrame.Navigate(new MangaExplorerPage());
         }
 
         private void HomeButton_Click(object sender, RoutedEventArgs e)
         {
-            ExplorerFrame.Navigate(new Uri("Explorer.xaml", UriKind.RelativeOrAbsolute));
+            //if (FrameHistory[FrameHistoryIndex] != ExplorerPage.ExploreMangaPage)
+            //{
+                App.CancellationToken.Cancel();
+                ExplorerFrame.Navigate(new MangaExplorerPage());
+            //}
         }
 
         private void BackButton_Click(object sender, RoutedEventArgs e)
         {
+            
             if (ExplorerFrame.CanGoBack)
             {
+                App.CancellationToken.Cancel();
                 ExplorerFrame.GoBack();
+                FrameHistoryIndex--;
             }
         }
 
@@ -47,13 +65,32 @@ namespace GaijinExplorer
         {
             if (ExplorerFrame.CanGoForward)
             {
+                App.CancellationToken.Cancel();
                 ExplorerFrame.GoForward();
+                FrameHistoryIndex++;
             }
         }
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        public static void AddToFrameHistory(ExplorerPage page)
+        {
+            while (FrameHistoryIndex < FrameHistory.Count - 1)
+            {
+                FrameHistory.RemoveAt(FrameHistory.Count - 1);
+            }
+            FrameHistory.Add(page);
+            FrameHistoryIndex++;
+            if (FrameHistory.Count > 5)
+            {
+                navigationService.RemoveBackEntry();
+                Debug.WriteLine("removed entry");
+                FrameHistory.RemoveAt(0);
+                FrameHistoryIndex--;
+            }
         }
 
         //private void Button_Click(object sender, RoutedEventArgs e)

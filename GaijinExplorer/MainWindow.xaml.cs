@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Collections;
 
 namespace GaijinExplorer
 {
@@ -23,16 +24,17 @@ namespace GaijinExplorer
     /// </summary>
     public partial class MainWindow : Window
     {
-        public static Frame Frame { get; set; }
+        public static Frame NavigationFrame { get; set; }
         public static NavigationService navigationService;
         public enum ExplorerPage { ExploreMangaPage, MangaPage, ChapterPage}
         private static int FrameHistoryIndex { get; set; }
         public static List<ExplorerPage> FrameHistory { get; set; }
 
+
         public MainWindow()
         {
             InitializeComponent();
-            Frame = ExplorerFrame;
+            NavigationFrame = ExplorerFrame;
             FrameHistoryIndex = -1;
             FrameHistory = new List<ExplorerPage>();
             //Frame.CacheMode = null;
@@ -85,20 +87,21 @@ namespace GaijinExplorer
 
         }
 
+        // Don't use
         public static void AddToFrameHistory(ExplorerPage page)
         {
-            while (FrameHistoryIndex < FrameHistory.Count - 1)
+            IEnumerable enumerable = NavigationFrame.BackStack;
+            if (NavigationFrame.CanGoBack)
             {
-                FrameHistory.RemoveAt(FrameHistory.Count - 1);
-            }
-            FrameHistory.Add(page);
-            FrameHistoryIndex++;
-            if (FrameHistory.Count > 5)
-            {
-                navigationService.RemoveBackEntry();
-                Debug.WriteLine("removed entry");
-                FrameHistory.RemoveAt(0);
-                FrameHistoryIndex--;
+                List<object> list = NavigationFrame.BackStack.Cast<object>().ToList();
+                Debug.WriteLine("backstack length: " + list.Count);
+                if (list.Count > 1)
+                {
+                    IEnumerator enumerator = NavigationFrame.BackStack.GetEnumerator();
+                    enumerator.MoveNext();
+                    //var q = (enumerator.Current.GetType());
+                    Debug.WriteLine(enumerator.Current.GetType());
+                }
             }
         }
 

@@ -28,16 +28,18 @@ namespace GaijinExplorer
         Manga.Chapter Chapter { get; set; }
         string MangaTitle { get; set; }
         List<Manga.Chapter> Chapters { get; set; }
+        int pageCount;
         ObservableCollection<ImageSource> ObservableImages = new ObservableCollection<ImageSource>();
         
 
-        public ChapterPage(string title, Manga.Chapter chapter, List<Manga.Chapter> chapters)
+        public ChapterPage(string title, Manga.Chapter chapter, List<Manga.Chapter> chapters, int removeLastPageCount)
         {
             InitializeComponent();
-            MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ChapterPage);
+            //MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ChapterPage);
             MangaTitle = title;
             Chapter = chapter;
             Chapters = chapters;
+            pageCount = removeLastPageCount;
             ImageList.ItemsSource = ObservableImages;
             ChapterNumber.Text = Chapter.Number.ToString();
             if (MangaTitle.Length < 23)
@@ -47,6 +49,10 @@ namespace GaijinExplorer
             else
             {
                 MangaTitleText.Text =  MangaTitle.Substring(0, 23) + "...";
+            }
+            if (pageCount > 1)
+            {
+                MainWindow.navigationService.RemoveBackEntry();
             }
             GetImages();
         }
@@ -77,7 +83,7 @@ namespace GaijinExplorer
             int index = Chapters.IndexOf(Chapters.Where(chapter => chapter.Id == Chapter.Id).FirstOrDefault());
             if (index < Chapters.Count - 1)
             {
-                MainWindow.Frame.Navigate(new ChapterPage(MangaTitle, Chapters[index + 1], Chapters));
+                MainWindow.NavigationFrame.Navigate(new ChapterPage(MangaTitle, Chapters[index + 1], Chapters, ++pageCount));
             }
         }
 
@@ -87,7 +93,7 @@ namespace GaijinExplorer
             int index = Chapters.IndexOf(Chapters.Where(chapter => chapter.Id == Chapter.Id).FirstOrDefault());
             if (index > 0)
             {
-                MainWindow.Frame.Navigate(new ChapterPage(MangaTitle, Chapters[index - 1], Chapters));
+                MainWindow.NavigationFrame.Navigate(new ChapterPage(MangaTitle, Chapters[index - 1], Chapters, ++pageCount));
             }
         }
     }

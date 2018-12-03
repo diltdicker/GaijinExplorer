@@ -32,7 +32,7 @@ namespace GaijinExplorer
         {
             InitializeComponent();
             //this.NavigationService.RemoveBackEntry();
-            MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ExploreMangaPage);
+            //MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ExploreMangaPage);
             MangaListBox.ItemsSource = ObservableMangas;
             DataContext = this;
 
@@ -102,7 +102,7 @@ namespace GaijinExplorer
                 string id = String.Copy(manga.Id);
                 MangaListBox.SelectedIndex = -1;
                 //ObservableMangas.Clear();
-                MainWindow.Frame.Navigate(new MangaPage(id));
+                MainWindow.NavigationFrame.Navigate(new MangaPage(id));
                 //this.NavigationService.Navigate(new MangaPage(id));
             }
         }

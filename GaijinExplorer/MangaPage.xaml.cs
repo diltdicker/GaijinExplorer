@@ -39,7 +39,7 @@ namespace GaijinExplorer
             InitializeComponent();
             Debug.WriteLine("MangaPage id: " + id);
             //ChapterList
-            MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.MangaPage);
+            //MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.MangaPage);
             CategoriesList.ItemsSource = ObservableCategories;
             ChapterList.ItemsSource = ObservableChapters;
             Task.Run(async () => await Http.HttpMangaEden.GetManga(id, (Manga.Manga manga) =>
@@ -101,7 +101,7 @@ namespace GaijinExplorer
             {
                 Debug.WriteLine("Chapter: " + chapter.Title);
                 (sender as ListView).SelectedIndex = -1;
-                MainWindow.Frame.Navigate(new ChapterPage(Manga.Title, chapter, Manga.Chapters));
+                MainWindow.NavigationFrame.Navigate(new ChapterPage(Manga.Title, chapter, Manga.Chapters, 0));
             }
         }
 

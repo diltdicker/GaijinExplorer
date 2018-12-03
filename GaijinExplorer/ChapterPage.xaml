@@ -10,13 +10,16 @@
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" HorizontalAlignment="Center" Orientation="Horizontal">
-            <Button Name="PreviousChapter" FontFamily="Segoe UI Symbol" Content="&#x1F860;" Width="25" FontSize="15" Click="PreviousChapter_Click"/>
+            <!--<Button Name="PreviousChapter" FontFamily="Segoe UI Symbol" Content="&#x1F860;" Width="25" FontSize="15" Click="PreviousChapter_Click"/>-->
+            <Button Name="PreviousChapter" Content="Previous Chapter" Width="125" FontSize="15" Click="PreviousChapter_Click"/>
+            <TextBlock Name="MangaTitleText" Margin="10,0,10,0" VerticalAlignment="Center" FontSize="15"/>
             <TextBlock Name="ChapterNumber" Margin="10,0,10,0" VerticalAlignment="Center" FontSize="15"/>
-            <Button Name="NextChapter" FontFamily="Segoe UI Symbol" Content="&#x1F862;" Width="25" FontSize="15" Click="NextChapter_Click"/>
+            <!--<Button Name="NextChapter" FontFamily="Segoe UI Symbol" Content="&#x1F862;" Width="25" FontSize="15" Click="NextChapter_Click"/>-->
+            <Button Name="NextChapter" Content="Next Chapter" Width="125" FontSize="15" Click="NextChapter_Click"/>
         </StackPanel>
         <!--<ListBox Name="ImageList" ScrollViewer.VerticalScrollBarVisibility="Disabled" IsEnabled="False" Height="Auto" HorizontalAlignment="Stretch">-->
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">

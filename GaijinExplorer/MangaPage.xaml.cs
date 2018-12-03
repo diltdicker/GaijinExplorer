@@ -47,7 +47,7 @@ namespace GaijinExplorer
                 this.Manga = manga;
                 Debug.WriteLine("image string: " + manga.ImageString);
                 
-                Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                 {
 
                     MangaTitle.Text = manga.Title;
@@ -59,14 +59,14 @@ namespace GaijinExplorer
                 }));
                 foreach (string category in manga.Categories)
                 {
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                     {
                         ObservableCategories.Add(category);
                     }));
                 }
                 foreach (Manga.Chapter chapter in manga.Chapters)
                 {
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                     {
                         ObservableChapters.Add(chapter);
                     }));
@@ -101,7 +101,7 @@ namespace GaijinExplorer
             {
                 Debug.WriteLine("Chapter: " + chapter.Title);
                 (sender as ListView).SelectedIndex = -1;
-                MainWindow.Frame.Navigate(new ChapterPage(chapter, Manga.Chapters));
+                MainWindow.Frame.Navigate(new ChapterPage(Manga.Title, chapter, Manga.Chapters));
             }
         }
 

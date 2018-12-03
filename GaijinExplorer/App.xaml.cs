@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Data.Sqlite;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -49,7 +50,7 @@ namespace GaijinExplorer
             "manga_id TEXT NOT NULL," +
             "date INTEGER DEFAULT 0," +
             "chapter_title TEXT," +
-            "has_viewed TEXT DEFAULT 'New' CHECK (has_viewed IN ('Viewed', 'New'))" +
+            "has_viewed TEXT DEFAULT 'New' CHECK (has_viewed IN ('Viewed', 'New'))," +
             "FOREIGN KEY (manga_id) REFERENCES " + APP_MANGA_TABLE + "(manga_id)" +
             ") WITHOUT ROWID;";
         const string INIT_MANGA_CHAPTER_IMAGE_TABLE = "CREATE TABLE IF NOT EXISTS " + APP_MANGA_CHAPTER_IMAGE_TABLE + " (" +
@@ -77,7 +78,39 @@ namespace GaijinExplorer
             this.InitializeComponent();
             Debug.WriteLine("start of program");
 
+            using (SqliteConnection db = new SqliteConnection(APP_DB_File))
+            {
+                db.Open();
 
+                SqliteCommand createManagaTable = new SqliteCommand(INIT_MANGA_TABLE, db);
+                SqliteCommand createMangaChapterTable = new SqliteCommand(INIT_MANGA_CHAPTER_TABLE, db);
+                SqliteCommand createMangaChapterImageTable = new SqliteCommand(INIT_MANGA_CHAPTER_IMAGE_TABLE, db);
+                SqliteCommand createFavoriteTable = new SqliteCommand(INIT_FAVORITE_TABLE, db);
+                SqliteCommand createMangaCategoryTable = new SqliteCommand(INIT_MANGA_CATEGORY_TABLE, db);
+                try
+                {
+                    Debug.WriteLine("Manga Table");
+                    createManagaTable.ExecuteReader();
+                    //Debug.WriteLine("Manga Chapter Table");
+                    createMangaChapterTable.ExecuteReader();
+                    //Debug.WriteLine("Manga C Image Table");
+                    createMangaChapterImageTable.ExecuteReader();
+                    //Debug.WriteLine("Manga F Table");
+                    createFavoriteTable.ExecuteReader();
+                    //Debug.WriteLine("Manga Category Table");
+                    createMangaCategoryTable.ExecuteReader();
+                }
+                catch (SqliteException e)
+                {
+                    Debug.WriteLine(e.TargetSite);
+                    Debug.WriteLine(e.StackTrace);
+                    Debug.WriteLine("Failed DB");
+                }
+                finally
+                {
+                    db.Close();
+                }
+            }
         }
     }
 }

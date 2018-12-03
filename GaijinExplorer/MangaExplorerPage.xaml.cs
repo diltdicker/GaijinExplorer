@@ -50,17 +50,7 @@ namespace GaijinExplorer
         }
 
 
-        public void UpdateMangaDB()
-        {
-            Task.Run(async () => await Http.HttpMangaEden.GetAllMangaTitlesAsync((List<Manga.Manga> mangas) =>
-            {
-                Task.Run(() =>
-                {
-                    // Send Manga to DB
-                });
-                return true;
-            }));
-        }
+        
 
         /// <summary>
         /// 
@@ -84,7 +74,7 @@ namespace GaijinExplorer
                     {
                         try
                         {
-                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                             {
                                 // UI Thread Execution
                                 ObservableMangas.Add(manga);
@@ -197,7 +187,7 @@ namespace GaijinExplorer
                 {
                     try
                     {
-                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                         {
                             ObservableMangas.Add(manga);
                         }));

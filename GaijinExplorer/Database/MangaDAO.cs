@@ -56,33 +56,118 @@ namespace GaijinExplorer.Database
             
         }
 
+        /// <summary>
+        /// To be called by MangaPage which gets a full copy of a manga
+        /// </summary>
+        /// <param name="manga"></param>
+        /// <returns></returns>
         public static async Task CreateMangaAsync(Manga.Manga manga)
-        {
-            if (manga.Id != null && manga.Title != null)
-            {
-
-            }
-        }
-
-        public static async Task UpdateMangaAsync(Manga.Manga manga)
         {
             if (manga.Id != null && manga.Title != null)
             {
                 using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
                 {
+
+                }
+            }
+        }
+
+        /// <summary>
+        /// To be called after updating DB with all titles
+        /// </summary>
+        /// <param name="manga"></param>
+        /// <returns></returns>
+        public static async Task UpdateMangaAsync(Manga.Manga manga)
+        {
+            if (manga.Id != null && manga.Title != null)
+            {
+                //Debug.WriteLine("Update Manga: " + manga.Id + " - " + manga.Title);
+                using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
+                {
+                    bool flag = true;
                     await db.OpenAsync();
                     SqliteCommand updateCommand = new SqliteCommand();
                     updateCommand.Connection = db;
-                    updateCommand.CommandText = "UPDATE " + App.APP_MANGA_TABLE + " SET WHERE manga_id = @ID;";
-                    // TODO
-                    // update Manga
-
-                    // TODO 
-                    // create categories
-                    SqliteCommand insertCommand = new SqliteCommand();
-                    insertCommand.Connection = db;
-                    insertCommand.CommandText = "INSERT OR INGNORE INTO " + App.APP_MANGA_CATEGORY_TABLE + " ;";
-
+                    updateCommand.CommandText = "UPDATE " + App.APP_MANGA_TABLE + " SET manga_title = @TITLE, image_url = @URL, " +
+                        "author = @AUTHOR, artist = @ARTIST, hits = @HITS, description = @DESCRIPTION, last_date = @DATE, " +
+                        "status = @STATUS WHERE manga_id = @ID;";
+                    //updateCommand.CommandText = "UPDATE " + App.APP_MANGA_TABLE + " SET manga_title = @TITLE, last_date = @DATE, status = @STATUS, hits = @HITS, image_url = @URL, author = @AUTHOR, artist = @ARTIST WHERE manga_id = @ID;";
+                    //Debug.WriteLine("Params start");
+                    updateCommand.Parameters.AddWithValue("@ID", manga.Id);
+                    updateCommand.Parameters.AddWithValue("@TITLE", manga.Title);
+                    updateCommand.Parameters.AddWithValue("@DATE", manga.LastDate);
+                    updateCommand.Parameters.AddWithValue("@STATUS", manga.Status.ToString());
+                    updateCommand.Parameters.AddWithValue("@HITS", manga.Hits);
+                    //Debug.WriteLine("Params mid");
+                    if (manga.ImageString != null)
+                    {
+                        updateCommand.Parameters.AddWithValue("@URL", manga.ImageString);
+                    }
+                    else
+                    {
+                        updateCommand.Parameters.AddWithValue("@URL", DBNull.Value);
+                    }
+                    if (manga.Author != null)
+                    {
+                        updateCommand.Parameters.AddWithValue("@AUTHOR", manga.Author);
+                    }
+                    else
+                    {
+                        updateCommand.Parameters.AddWithValue("@AUTHOR", DBNull.Value);
+                    }
+                    if (manga.Artist != null)
+                    {
+                        updateCommand.Parameters.AddWithValue("@ARTIST", manga.Artist);
+                    }
+                    else
+                    {
+                        updateCommand.Parameters.AddWithValue("@ARTIST", DBNull.Value);
+                    }
+                    if (manga.Description != null)
+                    {
+                        updateCommand.Parameters.AddWithValue("@DESCRIPTION", manga.Description);
+                    }
+                    else
+                    {
+                        updateCommand.Parameters.AddWithValue("@DESCRIPTION", DBNull.Value);
+                    }
+                    //Debug.WriteLine("Params end");
+                    try
+                    {
+                        await updateCommand.ExecuteReaderAsync();
+                    }
+                    catch(SqliteException e)
+                    {
+                        Debug.WriteLine("Manga: " + manga.Id + " - " + manga.Title);
+                        flag = false;
+                        Debug.WriteLine(e.TargetSite);
+                        Debug.WriteLine(e.StackTrace);
+                    }
+                    updateCommand.Dispose();
+                    if (manga.Categories != null && flag)
+                    {
+                        foreach (string category in manga.Categories)
+                        {
+                            //Debug.WriteLine("category: " + category);
+                            SqliteCommand insertCommand = new SqliteCommand();
+                            insertCommand.Connection = db;
+                            insertCommand.CommandText = "INSERT OR IGNORE INTO " + App.APP_MANGA_CATEGORY_TABLE + " (manga_id, category) VALUES (@ID, @CATEGORY);";
+                            insertCommand.Parameters.AddWithValue("@ID", manga.Id);
+                            insertCommand.Parameters.AddWithValue("@CATEGORY", category);
+                            //insertCommand.CommandText = "INSERT OR INGNORE INTO " + App.APP_MANGA_CATEGORY_TABLE + " (manga_id, category) VALUES (" + manga.Id + ", " + category + ");";
+                            try
+                            {
+                                await insertCommand.ExecuteReaderAsync();
+                            }
+                            catch (SqliteException e)
+                            {
+                                Debug.WriteLine("Manga: " + manga.Id + " - " + manga.Title);
+                                Debug.WriteLine(e.TargetSite);
+                                Debug.WriteLine(e.StackTrace);
+                            }
+                            insertCommand.Dispose();
+                        }
+                    }
                     db.Close();
                 }
             }

@@ -48,7 +48,12 @@ namespace GaijinExplorer
             {
                 this.Manga = manga;
                 //Debug.WriteLine("image string: " + manga.ImageString);
-                Task.Run(()=> Database.MangaDAO.CreateMangaAsyncLite(Manga));
+                Task.Run(async ()=> 
+                {
+                    await Database.MangaDAO.CreateMangaAsyncLite(Manga);
+                    await Database.MangaDAO.UpdateMangaAsync(Manga);
+                });
+
                 //if (MainWindow.ObservableFavoriteMangas.Where())
                 //if (MainWindow.ObservableFavoriteMangas.Where((mangaTmp) => mangaTmp.Id == Manga.Id)
                 //MainWindow.ObservableFavoriteMangas.Contains(MainWindow.ObservableFavoriteMangas.Where((mangaTmp) => mangaTmp.Id == Manga.Id).Cast<Manga.Manga>);

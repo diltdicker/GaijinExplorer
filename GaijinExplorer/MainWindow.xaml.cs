@@ -122,6 +122,7 @@ namespace GaijinExplorer
                 return true;
             });
             int i = 0;
+            // Inserts Manga Titles
             Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
                 DataBaseProgress.Value = 0;
                 DataBaseProgress.Maximum = mangaList.Count;
@@ -137,10 +138,23 @@ namespace GaijinExplorer
                     }));
                 }
             }
-
-            // TODO
             // Update All Manga Here
-
+            i = 0;
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
+                DataBaseProgress.Value = 0;
+                DataBaseProgress.Maximum = mangaList.Count;
+            }));
+            foreach (Manga.Manga manga in mangaList)
+            {
+                i++;
+                await Database.MangaDAO.UpdateMangaAsync(manga);                                    // Puts in rest of Values
+                if (i % 10 == 0)
+                {
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
+                        DataBaseProgress.Value = i;
+                    }));
+                }
+            }
             Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
                 DataBaseProgress.Visibility = Visibility.Collapsed;
             }));

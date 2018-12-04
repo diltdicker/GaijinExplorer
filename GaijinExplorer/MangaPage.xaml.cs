@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -55,6 +56,7 @@ namespace GaijinExplorer
                     MangaArtist.Inlines.Add(manga.Artist);
                     MangaAuthor.Inlines.Add(manga.Author);
                     MangaDescription.Text = manga.Description;
+                    MangaStatus.Text = manga.Status.ToString();
                     
                 }));
                 foreach (string category in manga.Categories)
@@ -66,9 +68,10 @@ namespace GaijinExplorer
                 }
                 foreach (Manga.Chapter chapter in manga.Chapters)
                 {
+                    Manga.Chapter modifiedChapter = Database.ChapterDAO.CreateAndGetChapterLite(chapter, Manga.Id);               // checks if chapter has already been viewed
                     Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                     {
-                        ObservableChapters.Add(chapter);
+                        ObservableChapters.Add(modifiedChapter);
                     }));
                 }
                 return true;

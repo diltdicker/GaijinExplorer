@@ -45,7 +45,8 @@ namespace GaijinExplorer
             if (App.FIRST_MANGA_GRAB)
             {
                 App.FIRST_MANGA_GRAB = !App.FIRST_MANGA_GRAB;
-                Task.Run(() => UpdateMangaDB());
+                //Task.Run(() => UpdateMangaDB());
+                Task.Factory.StartNew(() => UpdateMangaDB(), TaskCreationOptions.LongRunning);          // Better way of doing it for long running task
             }
             ExplorerFrame.Navigate(new MangaExplorerPage());
 
@@ -105,58 +106,6 @@ namespace GaijinExplorer
             }
         }
 
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    ExplorerFrame.Navigate(new System.Uri("TestPage2.xaml", UriKind.RelativeOrAbsolute));
-        //}
-
-        //private void MangaModeButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    ModeButton.Header = "Manga";
-        //}
-
-        //private void AnimeModeButton_Click(object sender, RoutedEventArgs e)
-        //{
-        //    ModeButton.Header = "Anime";
-        //}
-
-    //    Debug.WriteLine("Updating DB");
-    //            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
-    //            {
-    //                DataBaseProgress.Maximum = mangas.Count;
-    //                DataBaseProgress.Value = 0;
-    //            }));
-    //            // Quick DB Update
-    //            for (int i = 0; i< 5; i++)
-    //            {
-    //                Manga.Manga manga = mangas[i];
-    //Task.Run(async () => 
-    //                {
-                        
-    //                    Application.Current.Dispatcher.Invoke(DispatcherPriority.SystemIdle, new ThreadStart(delegate
-    //                    {
-    //                        DataBaseProgress.Value = i;
-    //                    }));
-    //                });
-    //            }
-                //Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
-                //{
-                //    DataBaseProgress.Maximum = mangas.Count;
-                //    DataBaseProgress.Value = 0;
-                //}));
-                //// Long DB Update
-                //for (int i = 0; i < mangas.Count; i++)
-                //{
-                //    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
-                //    {
-                //        DataBaseProgress.Value = i;
-                //    }));
-                //}
-                //Application.Current.Dispatcher.Invoke(DispatcherPriority., new ThreadStart(delegate
-                //{
-                //    DataBaseProgress.Visibility = Visibility.Collapsed;
-                //}));
-
         public async Task UpdateMangaDB()
         {
             Debug.WriteLine("getting info for DB");
@@ -174,7 +123,7 @@ namespace GaijinExplorer
             foreach (Manga.Manga manga in mangaList)
             {
                 i++;
-                await Database.MangaDAO.CreateMangaAsyncLite(manga);
+                await Database.MangaDAO.CreateMangaAsyncLite(manga);                                    // Puts in only Title and ID
                 if (i%100 == 0)
                 {
                     Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
@@ -182,6 +131,10 @@ namespace GaijinExplorer
                     }));
                 }
             }
+
+            // TODO
+            // Update All Manga Here
+
             Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
                 DataBaseProgress.Visibility = Visibility.Collapsed;
             }));

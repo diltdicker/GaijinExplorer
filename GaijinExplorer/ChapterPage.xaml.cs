@@ -52,8 +52,9 @@ namespace GaijinExplorer
             }
             if (pageCount > 1)
             {
-                MainWindow.navigationService.RemoveBackEntry();
+                MainWindow.navigationService.RemoveBackEntry();                     // Keeps only last chapter in history and the Page for the Manga after that
             }
+            Task.Run(() => Database.ChapterDAO.UpdateHasViewedAsync(Chapter.Id));
             GetImages();
         }
 
@@ -63,6 +64,7 @@ namespace GaijinExplorer
             {
                 try
                 {
+                    
                     Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                     {
                         ObservableImages.Add(image);

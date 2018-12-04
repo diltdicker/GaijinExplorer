@@ -42,6 +42,7 @@
                             Author: 
                             <Hyperlink Name="MangaAuthor" Click="MangaAuthor_Click"/>
                         </TextBlock>
+                        <TextBlock Margin="15" Name="MangaStatus"/>
                     </StackPanel>
                     <!--Categories-->
                     <ListBox Grid.Row="1" Name="CategoriesList" SelectionChanged="CategoriesList_SelectionChanged" BorderBrush="{x:Null}" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
@@ -64,15 +65,39 @@
                     <ListView Grid.Row="2" Grid.ColumnSpan="2" Name="ChapterList" SelectionChanged="ChapterList_SelectionChanged" BorderBrush="{x:Null}" ScrollViewer.CanContentScroll="False" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                         <ListView.ItemTemplate>
                             <DataTemplate x:Name="ChapterTemplate" DataType="{x:Type manga:Chapter}">
-                                <StackPanel Height="25" Orientation="Horizontal">
-                                    <TextBlock Margin="15,0,0,0" Text="{Binding Number}" Width="50"/>
-                                    <TextBlock Margin="15,0,0,0" Text="{Binding Title}"/>
-                                </StackPanel>
+                            <StackPanel Height="25" Orientation="Horizontal" VerticalAlignment="Center">
+                                <TextBlock Margin="15,0,0,0" Text="{Binding Number}" Width="50" FontSize="15">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="Gray"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=ViewedStatus}" Value="New">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                                <TextBlock Margin="15,0,0,0" Text="{Binding Title}" FontSize="15">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Foreground" Value="Gray"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Path=ViewedStatus}" Value="New">
+                                                    <Setter Property="Foreground" Value="Black"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </StackPanel>
                             </DataTemplate>
                         </ListView.ItemTemplate>
                     </ListView>
                 <!--</ScrollViewer>-->
             </Grid>
         </ScrollViewer>
+        <StackPanel Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Center">
+        </StackPanel>
     </Grid>
 </Page>

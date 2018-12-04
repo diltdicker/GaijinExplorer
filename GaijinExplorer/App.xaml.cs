@@ -28,7 +28,7 @@ namespace GaijinExplorer
         public const string APP_MANGA_TABLE = "manga_table";
         public const string APP_MANGA_CHAPTER_TABLE = "manga_chapter_table";
         public const string APP_MANGA_CHAPTER_IMAGE_TABLE = "manga_chapter_image_table";
-        public const string APP_FAVORITE_TABLE = "favorite_table";
+        public const string APP_MANGA_FAVORITE_TABLE = "favorite_table";
         public const string APP_MANGA_CATEGORY_TABLE = "manga_catagory_table";
         
         const string INIT_MANGA_TABLE = "CREATE TABLE IF NOT EXISTS " + APP_MANGA_TABLE + " (" +
@@ -60,7 +60,7 @@ namespace GaijinExplorer
             "PRIMARY KEY (chapter_id, image_number)," +
             "FOREIGN KEY (chapter_id) REFERENCES " + APP_MANGA_CHAPTER_TABLE + "(chapter_id)" +
             ") WITHOUT ROWID;";
-        const string INIT_FAVORITE_TABLE = "CREATE TABLE IF NOT EXISTS " + APP_FAVORITE_TABLE + " (" +
+        const string INIT_FAVORITE_TABLE = "CREATE TABLE IF NOT EXISTS " + APP_MANGA_FAVORITE_TABLE + " (" +
             "manga_id TEXT PRIMARY KEY," +
             "FOREIGN KEY (manga_id) REFERENCES " + APP_MANGA_TABLE + "(manga_id)" +
             ") WITHOUT ROWID;";

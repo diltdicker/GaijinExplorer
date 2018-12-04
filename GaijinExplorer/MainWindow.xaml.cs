@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace GaijinExplorer
 {
@@ -30,16 +31,20 @@ namespace GaijinExplorer
         private static int FrameHistoryIndex { get; set; }
         public static List<ExplorerPage> FrameHistory { get; set; }
 
+        public static ObservableCollection<Manga.Manga> ObservableFavoriteMangas = new ObservableCollection<Manga.Manga>();
 
         public MainWindow()
         {
             InitializeComponent();
+            FavoriteMangaList.ItemsSource = ObservableFavoriteMangas;
+            
+
             NavigationFrame = ExplorerFrame;
             FrameHistoryIndex = -1;
             FrameHistory = new List<ExplorerPage>();
             //Frame.CacheMode = null;
             navigationService = ExplorerFrame.NavigationService;
-
+            
             //ExplorerFrame.Source = new Uri("Explorer.xaml");
             //Debug.WriteLine("Frame source: " + ExplorerFrame.Source);
             if (App.FIRST_MANGA_GRAB)
@@ -48,6 +53,7 @@ namespace GaijinExplorer
                 //Task.Run(() => UpdateMangaDB());
                 Task.Factory.StartNew(() => UpdateMangaDB(), TaskCreationOptions.LongRunning);          // Better way of doing it for long running task
             }
+            Task.Run(() => RefreshFavorites());
             ExplorerFrame.Navigate(new MangaExplorerPage());
 
             
@@ -138,6 +144,56 @@ namespace GaijinExplorer
             Application.Current.Dispatcher.Invoke(DispatcherPriority.ContextIdle, new ThreadStart(delegate {
                 DataBaseProgress.Visibility = Visibility.Collapsed;
             }));
+        }
+
+        private void FavoriteMangaList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if ((sender as ListView).SelectedItem is Manga.Manga manga)
+            {
+                NavigationFrame.Navigate(new MangaPage(manga.Id));
+            }
+        }
+
+        public static void AddToFavorites(Manga.Manga manga)
+        {
+            Task.Run(async () =>
+            {
+                Debug.WriteLine("add start");
+                await Database.MangaDAO.AddMangaToFavoritesAsync(manga.Id);
+                Debug.WriteLine("after add");
+                await RefreshFavorites();
+                Debug.WriteLine("add finish");
+            });
+        }
+
+        public static void RemoveFromFavorites(Manga.Manga manga)
+        {
+            Task.Run(async () =>
+            {
+                await Database.MangaDAO.RemoveMangaFromFavoritesAsync(manga.Id);
+                await RefreshFavorites();
+            });
+        }
+
+        private static async Task RefreshFavorites()
+        {
+            List<Manga.Manga> mangas = await Database.MangaDAO.GetFavoriteMangasAsyncLite();
+            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
+            {
+                ObservableFavoriteMangas.Clear();
+            }));
+            foreach (Manga.Manga manga in mangas)
+            {
+                Debug.WriteLine("adding manga: " + manga.Title);
+                if (manga.Title.Length > 30)
+                {
+                    manga.Title = manga.Title.Substring(0, 30) + "...";
+                }
+                Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
+                {
+                    ObservableFavoriteMangas.Add(manga);
+                }));
+            }
         }
     }
 }

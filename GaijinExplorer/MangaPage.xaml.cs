@@ -28,6 +28,7 @@ namespace GaijinExplorer
         ObservableCollection<Manga.Chapter> ObservableChapters = new ObservableCollection<Manga.Chapter>();
         ObservableCollection<string> ObservableCategories = new ObservableCollection<string>();
         Manga.Manga Manga { get; set; }
+        bool favoriteStatus = false;
 
         public MangaPage()
         {
@@ -46,8 +47,23 @@ namespace GaijinExplorer
             Task.Run(async () => await Http.HttpMangaEden.GetManga(id, (Manga.Manga manga) =>
             {
                 this.Manga = manga;
-                Debug.WriteLine("image string: " + manga.ImageString);
-                
+                //Debug.WriteLine("image string: " + manga.ImageString);
+                Task.Run(()=> Database.MangaDAO.CreateMangaAsyncLite(Manga));
+                //if (MainWindow.ObservableFavoriteMangas.Where())
+                //if (MainWindow.ObservableFavoriteMangas.Where((mangaTmp) => mangaTmp.Id == Manga.Id)
+                //MainWindow.ObservableFavoriteMangas.Contains(MainWindow.ObservableFavoriteMangas.Where((mangaTmp) => mangaTmp.Id == Manga.Id).Cast<Manga.Manga>);
+                //MainWindow.ObservableFavoriteMangas.Contains(((mangaQuery) => mangaQuery.Id == Manga.Id).Fr);//
+                //Manga.Manga tmpManga = MainWindow.ObservableFavoriteMangas.Where(mangaQuery => mangaQuery.Id == Manga.Id).FirstOrDefault();
+                if (MainWindow.ObservableFavoriteMangas.Where(mangaQuery => mangaQuery.Id == Manga.Id).FirstOrDefault() is Manga.Manga)
+                {
+                    Debug.WriteLine("found favorite");
+                    favoriteStatus = true;
+                }
+                else
+                {
+                    Debug.WriteLine("not found favorite");
+                    favoriteStatus = false;
+                }
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                 {
 
@@ -57,7 +73,14 @@ namespace GaijinExplorer
                     MangaAuthor.Inlines.Add(manga.Author);
                     MangaDescription.Text = manga.Description;
                     MangaStatus.Text = manga.Status.ToString();
-                    
+                    if (favoriteStatus)
+                    {
+                        UnFavoriteButton.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        FavoriteButton.Visibility = Visibility.Visible;
+                    }
                 }));
                 foreach (string category in manga.Categories)
                 {
@@ -134,5 +157,20 @@ namespace GaijinExplorer
             uIElement.RaiseEvent(eventArgs);
         }
 
+        private void FavoriteButton_Click(object sender, RoutedEventArgs e)
+        {
+            FavoriteButton.Visibility = Visibility.Collapsed;
+            UnFavoriteButton.Visibility = Visibility.Visible;
+            favoriteStatus = !favoriteStatus;
+            MainWindow.AddToFavorites(Manga);
+        }
+
+        private void UnFavoriteButton_Click(object sender, RoutedEventArgs e)
+        {
+            UnFavoriteButton.Visibility = Visibility.Collapsed;
+            FavoriteButton.Visibility = Visibility.Visible;
+            favoriteStatus = !favoriteStatus;
+            MainWindow.RemoveFromFavorites(Manga);
+        }
     }
 }

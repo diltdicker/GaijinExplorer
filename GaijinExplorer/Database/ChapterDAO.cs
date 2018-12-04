@@ -46,7 +46,7 @@ namespace GaijinExplorer.Database
                             exists = true;
                             chapter.setHasViewed(reader.GetString(0));
                         }
-                        Debug.WriteLine("chapter exists: " + exists);
+                        //Debug.WriteLine("chapter exists: " + exists);
                         if (!exists)
                         {
                             SqliteCommand insertCommand = new SqliteCommand();
@@ -96,8 +96,8 @@ namespace GaijinExplorer.Database
             {
                 using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
                 {
-                    Debug.WriteLine("Updated Chapter");
-                    db.Open();
+                    //Debug.WriteLine("Updated Chapter");
+                    await db.OpenAsync();
                     SqliteCommand updateCommand = new SqliteCommand();
                     updateCommand.Connection = db;
                     updateCommand.CommandText = "UPDATE " + App.APP_MANGA_CHAPTER_TABLE + " SET has_viewed = @VIEWED WHERE chapter_id = @ID;";

@@ -43,6 +43,8 @@
                             <Hyperlink Name="MangaAuthor" Click="MangaAuthor_Click"/>
                         </TextBlock>
                         <TextBlock Margin="15" Name="MangaStatus"/>
+                        <Button Margin="15" Name="FavoriteButton" Content="Favorite" Visibility="Collapsed" Click="FavoriteButton_Click" Width="75"/>
+                        <Button Margin="15" Name="UnFavoriteButton" Content="Unfavorite" Visibility="Collapsed" Click="UnFavoriteButton_Click" Width="75"/>
                     </StackPanel>
                     <!--Categories-->
                     <ListBox Grid.Row="1" Name="CategoriesList" SelectionChanged="CategoriesList_SelectionChanged" BorderBrush="{x:Null}" ScrollViewer.CanContentScroll="False" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">

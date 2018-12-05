@@ -26,19 +26,35 @@ namespace GaijinExplorer
     public partial class ChapterPage : Page
     {
         Manga.Chapter Chapter { get; set; }
+        string MangaTitle { get; set; }
         List<Manga.Chapter> Chapters { get; set; }
+        int pageCount;
         ObservableCollection<ImageSource> ObservableImages = new ObservableCollection<ImageSource>();
         
 
-        public ChapterPage(Manga.Chapter chapter, List<Manga.Chapter> chapters)
+        public ChapterPage(string title, Manga.Chapter chapter, List<Manga.Chapter> chapters, int removeLastPageCount)
         {
             InitializeComponent();
-            MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ChapterPage);
+            //MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ChapterPage);
+            MangaTitle = title;
             Chapter = chapter;
             Chapters = chapters;
+            pageCount = removeLastPageCount;
             ImageList.ItemsSource = ObservableImages;
             ChapterNumber.Text = Chapter.Number.ToString();
-
+            if (MangaTitle.Length < 23)
+            {
+                MangaTitleText.Text = MangaTitle;
+            }
+            else
+            {
+                MangaTitleText.Text =  MangaTitle.Substring(0, 23) + "...";
+            }
+            if (pageCount > 1)
+            {
+                MainWindow.navigationService.RemoveBackEntry();                     // Keeps only last chapter in history and the Page for the Manga after that
+            }
+            Task.Run(() => Database.ChapterDAO.UpdateHasViewedAsync(Chapter.Id));
             GetImages();
         }
 
@@ -48,7 +64,8 @@ namespace GaijinExplorer
             {
                 try
                 {
-                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                    
+                    Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                     {
                         ObservableImages.Add(image);
                     }));
@@ -68,7 +85,7 @@ namespace GaijinExplorer
             int index = Chapters.IndexOf(Chapters.Where(chapter => chapter.Id == Chapter.Id).FirstOrDefault());
             if (index < Chapters.Count - 1)
             {
-                MainWindow.Frame.Navigate(new ChapterPage(Chapters[index + 1], Chapters));
+                MainWindow.NavigationFrame.Navigate(new ChapterPage(MangaTitle, Chapters[index + 1], Chapters, ++pageCount));
             }
         }
 
@@ -78,7 +95,7 @@ namespace GaijinExplorer
             int index = Chapters.IndexOf(Chapters.Where(chapter => chapter.Id == Chapter.Id).FirstOrDefault());
             if (index > 0)
             {
-                MainWindow.Frame.Navigate(new ChapterPage(Chapters[index - 1], Chapters));
+                MainWindow.NavigationFrame.Navigate(new ChapterPage(MangaTitle, Chapters[index - 1], Chapters, ++pageCount));
             }
         }
     }

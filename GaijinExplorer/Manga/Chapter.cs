@@ -21,5 +21,26 @@ namespace GaijinExplorer.Manga
 
         public List<BitmapImage> Images { get; set; }
         public List<byte[]> RawImages { get; set; }
+
+        public Chapter()
+        {
+            ViewedStatus = HasViewed.New;
+        }
+
+        public void setHasViewed(string hasViewed)
+        {
+            if (hasViewed.Equals("New"))
+            {
+                ViewedStatus = HasViewed.New;
+            }
+            else if (hasViewed.Equals("Viewed"))
+            {
+                ViewedStatus = HasViewed.Viewed;
+            }
+            else
+            {
+                ViewedStatus = HasViewed.New;
+            }
+        }
     }
 }

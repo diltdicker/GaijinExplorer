@@ -32,7 +32,7 @@ namespace GaijinExplorer
         {
             InitializeComponent();
             //this.NavigationService.RemoveBackEntry();
-            MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ExploreMangaPage);
+            //MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.ExploreMangaPage);
             MangaListBox.ItemsSource = ObservableMangas;
             DataContext = this;
 
@@ -50,17 +50,7 @@ namespace GaijinExplorer
         }
 
 
-        public void UpdateMangaDB()
-        {
-            Task.Run(async () => await Http.HttpMangaEden.GetAllMangaTitlesAsync((List<Manga.Manga> mangas) =>
-            {
-                Task.Run(() =>
-                {
-                    // Send Manga to DB
-                });
-                return true;
-            }));
-        }
+        
 
         /// <summary>
         /// 
@@ -84,7 +74,7 @@ namespace GaijinExplorer
                     {
                         try
                         {
-                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                            Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                             {
                                 // UI Thread Execution
                                 ObservableMangas.Add(manga);
@@ -112,7 +102,7 @@ namespace GaijinExplorer
                 string id = String.Copy(manga.Id);
                 MangaListBox.SelectedIndex = -1;
                 //ObservableMangas.Clear();
-                MainWindow.Frame.Navigate(new MangaPage(id));
+                MainWindow.NavigationFrame.Navigate(new MangaPage(id));
                 //this.NavigationService.Navigate(new MangaPage(id));
             }
         }
@@ -197,7 +187,7 @@ namespace GaijinExplorer
                 {
                     try
                     {
-                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Background, new ThreadStart(delegate
+                        Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
                         {
                             ObservableMangas.Add(manga);
                         }));

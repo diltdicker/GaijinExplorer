@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:GaijinExplorer"
+        xmlns:manga="clr-namespace:GaijinExplorer.Manga"
         mc:Ignorable="d"
         Title="Gaijin Explorer" Height="720" Width="980">
     <Grid>
@@ -20,10 +21,10 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="50"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="50"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <!--<Button Grid.Row="0" Content="Manga">
                 <Button.ContextMenu>
@@ -44,7 +45,16 @@
                 <Button Grid.Column="2" Name="NextButton" Content="Next" Click="NextButton_Click" FontSize="20"/>
             </Grid>
             <Button Grid.Row="1" Name="SearchButton" Content="Search" Click="SearchButton_Click" FontSize="20"/>
-            <ProgressBar Grid.Row="10" Value="75" Maximum="100" Margin="10"/>
+            <ScrollViewer Grid.Row="2" Grid.Column="0" HorizontalScrollBarVisibility="Disabled" Margin="10" VerticalScrollBarVisibility="Auto">
+                <ListView Name="FavoriteMangaList" SelectionChanged="FavoriteMangaList_SelectionChanged" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:Name="MangaTemplate" DataType="{x:Type manga:Manga}">
+                            <TextBlock Text="{Binding Title}" TextWrapping="Wrap" FontSize="15" Height="Auto"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </ScrollViewer>
+            <ProgressBar Name="DataBaseProgress" Grid.Row="10" Margin="10"/>
         </Grid>
     </Grid>
 </Window>

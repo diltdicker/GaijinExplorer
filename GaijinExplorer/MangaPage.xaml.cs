@@ -44,11 +44,11 @@ namespace GaijinExplorer
             //MainWindow.AddToFrameHistory(MainWindow.ExplorerPage.MangaPage);
             CategoriesList.ItemsSource = ObservableCategories;
             ChapterList.ItemsSource = ObservableChapters;
-            Task.Run(async () => await Http.HttpMangaEden.GetManga(id, (Manga.Manga manga) =>
+            Task.Factory.StartNew(async () => await Http.HttpMangaEden.GetManga(id, (Manga.Manga manga) =>
             {
                 this.Manga = manga;
                 //Debug.WriteLine("image string: " + manga.ImageString);
-                Task.Run(async ()=> 
+                Task.Run(async () =>
                 {
                     await Database.MangaDAO.CreateMangaAsyncLite(Manga);
                     await Database.MangaDAO.UpdateMangaAsync(Manga);
@@ -103,7 +103,7 @@ namespace GaijinExplorer
                     }));
                 }
                 return true;
-            }));
+            }), TaskCreationOptions.LongRunning);
         }
 
         private void MangaArtist_Click(object sender, RoutedEventArgs e)

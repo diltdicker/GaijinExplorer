@@ -8,6 +8,9 @@ Manga Eden client for Windows
 * Favorite manga to save them for later.
 * Keeps track of which chapters you've read so you don't lose your place.
 
+## Download
+Download the latest [release](https://github.com/diltdicker/GaijinExplorer/releases)
+
 ## Support
 If you would like to support Manga Eden (they host the manga) you can do so [here](https://www.mangaeden.com/donate/).
 

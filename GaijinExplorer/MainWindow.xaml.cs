@@ -91,7 +91,7 @@ namespace GaijinExplorer
 
         private void SearchButton_Click(object sender, RoutedEventArgs e)
         {
-
+            NavigationFrame.Navigate(new SearchPage());
         }
 
         // Don't use

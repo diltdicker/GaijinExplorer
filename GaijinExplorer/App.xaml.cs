@@ -76,7 +76,7 @@ namespace GaijinExplorer
         public App()
         {
             this.InitializeComponent();
-            Debug.WriteLine("start of program");
+            //Debug.WriteLine("start of program");
 
             using (SqliteConnection db = new SqliteConnection(APP_DB_File))
             {
@@ -89,7 +89,7 @@ namespace GaijinExplorer
                 SqliteCommand createMangaCategoryTable = new SqliteCommand(INIT_MANGA_CATEGORY_TABLE, db);
                 try
                 {
-                    Debug.WriteLine("Manga Table");
+                    //Debug.WriteLine("Manga Table");
                     createManagaTable.ExecuteReader();
                     //Debug.WriteLine("Manga Chapter Table");
                     createMangaChapterTable.ExecuteReader();
@@ -104,7 +104,7 @@ namespace GaijinExplorer
                 {
                     Debug.WriteLine(e.TargetSite);
                     Debug.WriteLine(e.StackTrace);
-                    Debug.WriteLine("Failed DB");
+                    //Debug.WriteLine("Failed DB");
                 }
                 finally
                 {

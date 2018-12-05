@@ -101,20 +101,20 @@ namespace GaijinExplorer
             if (NavigationFrame.CanGoBack)
             {
                 List<object> list = NavigationFrame.BackStack.Cast<object>().ToList();
-                Debug.WriteLine("backstack length: " + list.Count);
+                //Debug.WriteLine("backstack length: " + list.Count);
                 if (list.Count > 1)
                 {
                     IEnumerator enumerator = NavigationFrame.BackStack.GetEnumerator();
                     enumerator.MoveNext();
                     //var q = (enumerator.Current.GetType());
-                    Debug.WriteLine(enumerator.Current.GetType());
+                    //Debug.WriteLine(enumerator.Current.GetType());
                 }
             }
         }
 
         public async Task UpdateMangaDB()
         {
-            Debug.WriteLine("getting info for DB");
+            //Debug.WriteLine("getting info for DB");
             List<Manga.Manga> mangaList = null;
             await Http.HttpMangaEden.GetAllMangaTitlesAsync((List<Manga.Manga> mangas) =>
             {
@@ -172,11 +172,11 @@ namespace GaijinExplorer
         {
             Task.Run(async () =>
             {
-                Debug.WriteLine("add start");
+                //Debug.WriteLine("add start");
                 await Database.MangaDAO.AddMangaToFavoritesAsync(manga.Id);
-                Debug.WriteLine("after add");
+                //Debug.WriteLine("after add");
                 await RefreshFavorites();
-                Debug.WriteLine("add finish");
+                //Debug.WriteLine("add finish");
             });
         }
 
@@ -198,7 +198,7 @@ namespace GaijinExplorer
             }));
             foreach (Manga.Manga manga in mangas)
             {
-                Debug.WriteLine("adding manga: " + manga.Title);
+                //Debug.WriteLine("adding manga: " + manga.Title);
                 if (manga.Title.Length > 30)
                 {
                     manga.Title = manga.Title.Substring(0, 30) + "...";

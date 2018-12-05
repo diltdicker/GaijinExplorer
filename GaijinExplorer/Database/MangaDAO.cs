@@ -138,7 +138,7 @@ namespace GaijinExplorer.Database
                     }
                     catch(SqliteException e)
                     {
-                        Debug.WriteLine("Manga: " + manga.Id + " - " + manga.Title);
+                        //Debug.WriteLine("Manga: " + manga.Id + " - " + manga.Title);
                         flag = false;
                         Debug.WriteLine(e.TargetSite);
                         Debug.WriteLine(e.StackTrace);
@@ -161,7 +161,7 @@ namespace GaijinExplorer.Database
                             }
                             catch (SqliteException e)
                             {
-                                Debug.WriteLine("Manga: " + manga.Id + " - " + manga.Title);
+                                //Debug.WriteLine("Manga: " + manga.Id + " - " + manga.Title);
                                 Debug.WriteLine(e.TargetSite);
                                 Debug.WriteLine(e.StackTrace);
                             }
@@ -255,6 +255,164 @@ namespace GaijinExplorer.Database
                 }
                 db.Close();
             }
+        }
+
+        public static async Task<List<Manga.Manga>> GetMangasFromTitleAsync(string title)
+        {
+            List<Manga.Manga> mangas = new List<Manga.Manga>();
+            if (title != null && Sanitize.SanitizeString(title) != null)
+            {
+                using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
+                {
+                    await db.OpenAsync();
+                    SqliteCommand sqliteCommand = new SqliteCommand();
+                    sqliteCommand.Connection = db;
+                    sqliteCommand.CommandText = "SELECT manga_id, manga_title, image_url FROM " + App.APP_MANGA_TABLE + " WHERE manga_title LIKE '%" + title + "%' COLLATE NOCASE ORDER BY hits DESC;";
+                    //sqliteCommand.Parameters.AddWithValue("@TITLE", title);
+                    SqliteDataReader reader = null;
+                    try
+                    {
+                        reader = await sqliteCommand.ExecuteReaderAsync();
+                    }
+                    catch (SqliteException e)
+                    {
+                        Debug.WriteLine(e.TargetSite);
+                        Debug.WriteLine(e.StackTrace);
+                    }
+                    if (reader != null)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            //Debug.WriteLine("read");
+                            Manga.Manga manga = new Manga.Manga();
+                            manga.Id = reader.GetString(0);
+                            manga.Title = reader.GetString(1);
+                            manga.ImageString = reader.GetString(2);
+                            mangas.Add(manga);
+                        }
+                    }
+                    db.Close();
+                }
+            }
+            return mangas;
+        }
+
+        public static async Task<List<Manga.Manga>> GetMangasFromCategoryAsync(string category)
+        {
+            List<Manga.Manga> mangas = new List<Manga.Manga>();
+            if (category != null && Sanitize.SanitizeString(category) != null)
+            {
+                using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
+                {
+                    await db.OpenAsync();
+                    SqliteCommand sqliteCommand = new SqliteCommand();
+                    sqliteCommand.Connection = db;
+                    sqliteCommand.CommandText = "SELECT " + App.APP_MANGA_TABLE + ".manga_id, manga_title, image_url FROM " + App.APP_MANGA_TABLE + " INNER JOIN " + App.APP_MANGA_CATEGORY_TABLE + 
+                        " ON " + App.APP_MANGA_TABLE + ".manga_id = " + App.APP_MANGA_CATEGORY_TABLE + ".manga_id WHERE category = @CATEGORY ORDER BY hits DESC;";
+                    sqliteCommand.Parameters.AddWithValue("@CATEGORY", category);
+                    SqliteDataReader reader = null;
+                    try
+                    {
+                        reader = await sqliteCommand.ExecuteReaderAsync();
+                    }
+                    catch (SqliteException e)
+                    {
+                        Debug.WriteLine(e.TargetSite);
+                        Debug.WriteLine(e.StackTrace);
+                    }
+                    if (reader != null)
+                    {
+                        while(await reader.ReadAsync())
+                        {
+                            Manga.Manga manga = new Manga.Manga();
+                            manga.Id = reader.GetString(0);
+                            manga.Title = reader.GetString(1);
+                            manga.ImageString = reader.GetString(2);
+                            mangas.Add(manga);
+                        }
+                    }
+                    db.Close();
+                }
+            }
+            return mangas;
+        }
+
+        public static async Task<List<Manga.Manga>> GetMangasFromArtistAsync(string artist)
+        {
+            List<Manga.Manga> mangas = new List<Manga.Manga>();
+            if (artist != null && Sanitize.SanitizeString(artist) != null)
+            {
+                using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
+                {
+                    await db.OpenAsync();
+                    SqliteCommand sqliteCommand = new SqliteCommand();
+                    sqliteCommand.Connection = db;
+                    sqliteCommand.CommandText = "SELECT manga_id, manga_title, image_url FROM " + App.APP_MANGA_TABLE + " WHERE artist = @ARTIST COLLATE NOCASE ORDER BY hits DESC;";
+                    sqliteCommand.Parameters.AddWithValue("@ARTIST", artist);
+                    SqliteDataReader reader = null;
+                    try
+                    {
+                        reader = await sqliteCommand.ExecuteReaderAsync();
+                    }
+                    catch (SqliteException e)
+                    {
+                        Debug.WriteLine(e.TargetSite);
+                        Debug.WriteLine(e.StackTrace);
+                    }
+                    if (reader != null)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            Manga.Manga manga = new Manga.Manga();
+                            manga.Id = reader.GetString(0);
+                            manga.Title = reader.GetString(1);
+                            manga.ImageString = reader.GetString(2);
+                            mangas.Add(manga);
+                        }
+                    }
+                    db.Close();
+                }
+            }
+            return mangas;
+        }
+
+        public static async Task<List<Manga.Manga>> GetMangasFromAuthorAsync(string author)
+        {
+            List<Manga.Manga> mangas = new List<Manga.Manga>();
+            if (author != null && Sanitize.SanitizeString(author) != null)
+            {
+                using (SqliteConnection db = new SqliteConnection(App.APP_DB_File))
+                {
+                    await db.OpenAsync();
+                    SqliteCommand sqliteCommand = new SqliteCommand();
+                    sqliteCommand.Connection = db;
+                    sqliteCommand.CommandText = "SELECT manga_id, manga_title, image_url FROM " + App.APP_MANGA_TABLE + " WHERE author = @AUTHOR COLLATE NOCASE ORDER BY hits DESC;";
+                    sqliteCommand.Parameters.AddWithValue("@AUTHOR", author);
+                    SqliteDataReader reader = null;
+                    try
+                    {
+                        reader = await sqliteCommand.ExecuteReaderAsync();
+                    }
+                    catch (SqliteException e)
+                    {
+                        Debug.WriteLine(e.TargetSite);
+                        Debug.WriteLine(e.StackTrace);
+                    }
+                    if (reader != null)
+                    {
+                        while (await reader.ReadAsync())
+                        {
+                            Manga.Manga manga = new Manga.Manga();
+                            manga.Id = reader.GetString(0);
+                            manga.Title = reader.GetString(1);
+                            manga.ImageString = reader.GetString(2);
+                            mangas.Add(manga);
+                        }
+                    }
+                    db.Close();
+                }
+            }
+            return mangas;
         }
     }
 }

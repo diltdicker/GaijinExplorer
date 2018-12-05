@@ -33,7 +33,7 @@ namespace GaijinExplorer
         public MangaPage()
         {
             InitializeComponent();
-            Debug.WriteLine("MangaPage");
+            //Debug.WriteLine("MangaPage");
         }
 
         public MangaPage(string id)
@@ -61,12 +61,12 @@ namespace GaijinExplorer
                 //Manga.Manga tmpManga = MainWindow.ObservableFavoriteMangas.Where(mangaQuery => mangaQuery.Id == Manga.Id).FirstOrDefault();
                 if (MainWindow.ObservableFavoriteMangas.Where(mangaQuery => mangaQuery.Id == Manga.Id).FirstOrDefault() is Manga.Manga)
                 {
-                    Debug.WriteLine("found favorite");
+                    //Debug.WriteLine("found favorite");
                     favoriteStatus = true;
                 }
                 else
                 {
-                    Debug.WriteLine("not found favorite");
+                    //Debug.WriteLine("not found favorite");
                     favoriteStatus = false;
                 }
                 Application.Current.Dispatcher.Invoke(DispatcherPriority.Normal, new ThreadStart(delegate
@@ -108,20 +108,29 @@ namespace GaijinExplorer
 
         private void MangaArtist_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Artist: " + Manga.Artist);
+            //Debug.WriteLine("Artist: " + Manga.Artist);
+            if (Manga.Artist != null && Manga.Artist.Length > 0)
+            {
+                MainWindow.NavigationFrame.Navigate(new SearchPage(SearchPage.SearchType.Artist, Manga.Artist));
+            }
         }
 
         private void MangaAuthor_Click(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("Author: " + Manga.Author);
+            //Debug.WriteLine("Author: " + Manga.Author);
+            if (Manga.Author != null && Manga.Author.Length > 0)
+            {
+                MainWindow.NavigationFrame.Navigate(new SearchPage(SearchPage.SearchType.Author, Manga.Author));
+            }
         }
 
         private void CategoriesList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Debug.WriteLine("Category: " + (sender as ListBox).SelectedItem as string);
+            //Debug.WriteLine("Category: " + (sender as ListBox).SelectedItem as string);
             if ((sender as ListBox).SelectedItem is string category)
             {
                 (sender as ListBox).SelectedIndex = -1;
+                MainWindow.NavigationFrame.Navigate(new SearchPage(SearchPage.SearchType.Category, category));
             }
 
         }
@@ -130,7 +139,7 @@ namespace GaijinExplorer
         {
             if ((sender as ListView).SelectedItem is Manga.Chapter chapter)
             {
-                Debug.WriteLine("Chapter: " + chapter.Title);
+                //Debug.WriteLine("Chapter: " + chapter.Title);
                 (sender as ListView).SelectedIndex = -1;
                 MainWindow.NavigationFrame.Navigate(new ChapterPage(Manga.Title, chapter, Manga.Chapters, 0));
             }

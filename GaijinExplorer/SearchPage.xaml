@@ -7,8 +7,9 @@
       xmlns:manga="clr-namespace:GaijinExplorer.Manga"
       mc:Ignorable="d" 
       d:DesignHeight="450" d:DesignWidth="800"
-      Title="SearchPage">
-
+      Title="SearchPage"
+      FocusManager.FocusedElement="{Binding ElementName=QueryBox}">
+       
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
@@ -22,26 +23,24 @@
             <TextBox Name="QueryBox" Grid.Column="0" Margin="20,0,20,0" FontSize="20" TextChanged="QueryBox_TextChanged"/>
             <!--<Button Name="SearchButton" Grid.Column="1" Content="Search" Click="SearchButton_Click" Margin="20,0,20,0" FontSize="20"/>-->
         </Grid>
-        <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-            <ListBox Name="ResultList">
-                <ListBox.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <WrapPanel/>
-                    </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate x:Name="MangaTemplate" DataType="{x:Type manga:Manga}">
-                        <Grid Height="350" Width="200">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <Image Grid.Row="0" Source="{Binding ImageString}" VerticalAlignment="Top"/>
-                            <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="Wrap" FontSize="20" FontWeight="DemiBold" Margin="0,0,0,5" TextAlignment="Center"/>
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </ScrollViewer>
+        <ListBox Grid.Row="1" Name="ResultList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionChanged="ResultList_SelectionChanged">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate x:Name="MangaTemplate" DataType="{x:Type manga:Manga}">
+                    <Grid Height="350" Width="200">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Image Grid.Row="0" Source="{Binding ImageString}" VerticalAlignment="Top"/>
+                        <TextBlock Grid.Row="1" Text="{Binding Title}" TextWrapping="Wrap" FontSize="20" FontWeight="DemiBold" Margin="0,0,0,5" TextAlignment="Center"/>
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </Page>

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,8 +21,9 @@ namespace GaijinExplorer
         public static CancellationTokenSource CancellationToken { get; set; }
 
         //============================================================================================
-
-        public const string APP_DB_File = "Filename=GaijinExplorer.db.sqlite3";
+        //private static string APP_DB_PATH = Directory.GetParent(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)).FullName + "\\Roaming\\GaijinExplorer";
+        
+        public const string APP_DB_File = "Filename="+ "" + "GaijinExplorer.db.sqlite3";
 
         //============================================================================================
 
@@ -77,7 +79,7 @@ namespace GaijinExplorer
         {
             this.InitializeComponent();
             //Debug.WriteLine("start of program");
-
+            //Directory.CreateDirectory(APP_DB_PATH);
             using (SqliteConnection db = new SqliteConnection(APP_DB_File))
             {
                 db.Open();

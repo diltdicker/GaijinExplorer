@@ -28,9 +28,10 @@ namespace GaijinExplorer.Database
                     // Insert Command
                     SqliteCommand insertCommand = new SqliteCommand();
                     insertCommand.Connection = db;
-                    insertCommand.CommandText = "INSERT OR IGNORE INTO " + App.APP_MANGA_TABLE + " (manga_id, manga_title, status) VALUES (@ID, @TITLE, @STATUS);";
+                    insertCommand.CommandText = "INSERT OR IGNORE INTO " + App.APP_MANGA_TABLE + " (manga_id, manga_title, image_url, status) VALUES (@ID, @TITLE, @URL, @STATUS);";
                     insertCommand.Parameters.AddWithValue("@ID", manga.Id);
                     insertCommand.Parameters.AddWithValue("@TITLE", manga.Title);
+                    insertCommand.Parameters.AddWithValue("@URL", manga.ImageString);
                     insertCommand.Parameters.AddWithValue("@STATUS", manga.Status.ToString());
                     //Debug.WriteLine("ID: " + manga.Id + '\n' + "Title: " + manga.Title + '\n' + "Status: " + manga.Status.ToString());
                     try

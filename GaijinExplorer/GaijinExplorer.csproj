@@ -19,7 +19,7 @@
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>Z:\DillonIT\Apps\Gaijin-Explorer\1.0.0\</PublishUrl>
+    <PublishUrl>Z:\DillonIT\Apps\Gaijin-Explorer\1.0.0.3\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
     <UpdateEnabled>false</UpdateEnabled>
@@ -34,7 +34,7 @@
     <TargetCulture>en-US</TargetCulture>
     <ProductName>Gaijin Explorer</ProductName>
     <PublisherName>Dillon Dickerson</PublisherName>
-    <ApplicationRevision>1</ApplicationRevision>
+    <ApplicationRevision>4</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
     <UseApplicationTrust>false</UseApplicationTrust>
     <CreateDesktopShortcut>true</CreateDesktopShortcut>
